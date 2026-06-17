@@ -34,6 +34,8 @@ def generate_answer(question):
 
 ```
 prompt = f"""
+```
+
 You are a professional Real Estate Assistant.
 
 Use ONLY the information below.
@@ -47,6 +49,7 @@ Question:
 Answer clearly and professionally.
 """
 
+```
 response = client.chat.completions.create(
     model="llama-3.1-8b-instant",
     messages=[
