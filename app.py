@@ -24,12 +24,10 @@ question = st.chat_input("Ask a real estate question...")
 if question:
 
 ```
-st.session_state.messages.append(
-    {
-        "role": "user",
-        "content": question
-    }
-)
+st.session_state.messages.append({
+    "role": "user",
+    "content": question
+})
 
 with st.chat_message("user"):
     st.markdown(question)
@@ -43,12 +41,10 @@ try:
 except Exception as e:
     answer = f"Error: {str(e)}"
 
-st.session_state.messages.append(
-    {
-        "role": "assistant",
-        "content": answer
-    }
-)
+st.session_state.messages.append({
+    "role": "assistant",
+    "content": answer
+})
 
 with st.chat_message("assistant"):
     st.markdown(answer)
