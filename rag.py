@@ -1,57 +1,62 @@
 import os
-import chromadb
-
+from pypdf import PdfReader
 from groq import Groq
-from dotenv import load_dotenv
-
-load_dotenv()
+import streamlit as st
 
 client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
+api_key=st.secrets["GROQ_API_KEY"]
 )
 
-db = chromadb.PersistentClient(
-    path="chroma_db"
-)
+documents = []
 
-collection = db.get_collection(
-    "real_estate_docs"
-)
+for file in os.listdir("data"):
+if file.endswith(".pdf"):
+
+```
+    reader = PdfReader(
+        os.path.join("data", file)
+    )
+
+    text = ""
+
+    for page in reader.pages:
+        extracted = page.extract_text()
+
+        if extracted:
+            text += extracted + "\n"
+
+    documents.append(text)
+```
+
+knowledge_base = "\n".join(documents)
 
 def generate_answer(question):
 
-    results = collection.query(
-        query_texts=[question],
-        n_results=5
-    )
+```
+prompt = f"""
+You are a professional Real Estate Assistant.
 
-    context = "\n".join(
-        results["documents"][0]
-    )
+Use ONLY the information below.
 
-    prompt = f"""
-    You are a professional Real Estate Assistant.
+Context:
+{knowledge_base[:15000]}
 
-    Use ONLY the following context.
+Question:
+{question}
 
-    Context:
-    {context}
+Answer clearly and professionally.
+"""
 
-    Question:
-    {question}
+response = client.chat.completions.create(
+    model="llama-3.1-8b-instant",
+    messages=[
+        {
+            "role": "user",
+            "content": prompt
+        }
+    ],
+    temperature=0.3
+)
 
-    Answer clearly and professionally.
-    """
-
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        temperature=0.3
-    )
-
-    return response.choices[0].message.content
+return response.choices[0].message.content
+```
