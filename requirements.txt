@@ -1,6 +1,6 @@
 streamlit
 groq==0.31.0
-python-dotenv
 pandas
-chromadb
 pypdf
+chromadb==0.5.5
+protobuf==5.29.5
