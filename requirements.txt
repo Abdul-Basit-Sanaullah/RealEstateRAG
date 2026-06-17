@@ -2,5 +2,3 @@ streamlit
 groq==0.31.0
 pandas
 pypdf
-chromadb==0.5.5
-protobuf==5.29.5
